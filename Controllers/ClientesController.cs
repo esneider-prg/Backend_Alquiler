@@ -78,7 +78,7 @@ namespace Backend_Alquiler.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
-            var clientes = await _context.Clientes.Where(buscado => buscado.Email == cliente.Email || buscado.NombreCliente == cliente.NombreCliente).FirstOrDefaultAsync();
+            var clientes = await _context.Clientes.Where(buscado => buscado.Email == cliente.Email || buscado.DNI == cliente.DNI).FirstOrDefaultAsync();
             if (clientes== null)
             {
                 _context.Clientes.Add(cliente);
@@ -88,7 +88,7 @@ namespace Backend_Alquiler.Controllers
             }
             else
             {
-                return BadRequest("Email o nombre del cliente duplicado");
+                return BadRequest("Email o DNI del cliente duplicado");
             }
             
         }
