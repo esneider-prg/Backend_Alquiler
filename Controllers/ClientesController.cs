@@ -41,6 +41,20 @@ namespace Backend_Alquiler.Controllers
             return cliente;
         }
 
+        // GET: api/Clientes/dni/5
+        [HttpGet("dni/{dni}")]
+        public async Task<ActionResult<Cliente>> GetClienteDNI(int dni)
+        {
+            var cliente = await _context.Clientes.Where(clienteBuscado => clienteBuscado.DNI == dni).FirstOrDefaultAsync();
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            return cliente;
+        }
+
         // PUT: api/Clientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

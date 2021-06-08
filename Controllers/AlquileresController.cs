@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend_Alquiler.Models;
+using Backend_Alquiler.ViewModels;
 
 namespace Backend_Alquiler.Controllers
 {
@@ -75,10 +76,23 @@ namespace Backend_Alquiler.Controllers
         // POST: api/Alquileres
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Alquiler>> PostAlquiler(Alquiler alquiler)
+        public async Task<ActionResult<AlquilerViewModel>> PostAlquiler(AlquilerViewModel alquilerViewModel)
         {
+            Alquiler alquiler = new Alquiler();
+            alquiler.ClienteId = alquilerViewModel.ClienteId;
+            alquiler.FechaAlquiler = alquilerViewModel.FechaAlquiler;
+            alquiler.ValorAlquiler = alquilerViewModel.valor;
             _context.Alquileres.Add(alquiler);
             await _context.SaveChangesAsync();
+            
+            foreach (var cdId in alquilerViewModel.Detalle)
+            {
+                DetalleAlquiler detalleAlquiler = new DetalleAlquiler();
+                detalleAlquiler.AlquilerId = alquiler.Id;
+                detalleAlquiler.CdId = cdId;
+                _context.DetalleAlquileres.Add(detalleAlquiler);
+                _context.SaveChanges();
+            }
 
             return CreatedAtAction("GetAlquiler", new { id = alquiler.Id }, alquiler);
         }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend_Alquiler.Models;
+using Backend_Alquiler.ViewModels;
 
 namespace Backend_Alquiler.Controllers
 {
@@ -27,6 +28,24 @@ namespace Backend_Alquiler.Controllers
             return await _context.Cds.ToListAsync();
         }
 
+        // GET: api/Cds/disponibles
+        [HttpGet("disponibles")]
+        public async Task<ActionResult<IEnumerable<CdViewModel>>> GetCdsDisponibles()
+        {
+            var Lista =  (from i in _context.Cds
+                         select new CdViewModel
+                         {
+                             Id = i.Id,
+                             Ubicacion = i.Ubicacion,
+                             Condicion = i.Condicion,
+                             estado = i.Estado,
+                             Titulo = _context.Titulos.Where(titulo => titulo.Id == i.TituloId).FirstOrDefault()
+
+                         }).Where(cd => cd.estado == "Disponible").ToList();
+
+            return Lista;
+        }
+
         // GET: api/Cds/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cd>> GetCd(int id)
@@ -40,6 +59,7 @@ namespace Backend_Alquiler.Controllers
 
             return cd;
         }
+
 
         // PUT: api/Cds/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
