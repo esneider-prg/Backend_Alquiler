@@ -28,6 +28,22 @@ namespace Backend_Alquiler.Controllers
             return await _context.Alquileres.ToListAsync();
         }
 
+        // GET: api/Alquileres/listado
+        [HttpGet("listado")]
+        public async Task<ActionResult<IEnumerable<AlquilerViewModel>>> GetAlquileresListado()
+        {
+            var Lista =  (from i in _context.Alquileres
+                         select new AlquilerViewModel
+                         {
+                             Id = i.Id,
+                             FechaAlquiler = i.FechaAlquiler,
+                             valor = i.ValorAlquiler,
+                             Cliente = _context.Clientes.Where(c => c.Id == i.ClienteId).FirstOrDefault(),
+                             DetalleAlquilers = _context.DetalleAlquileres.Where(d => d.AlquilerId == i.Id).ToList()
+        }).ToList();
+            return Lista;
+        }
+
         // GET: api/Alquileres/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Alquiler>> GetAlquiler(int id)

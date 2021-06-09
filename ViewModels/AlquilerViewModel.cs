@@ -13,5 +13,7 @@ namespace Backend_Alquiler.ViewModels
         public string FechaAlquiler { get; set; }
         public int valor { get; set; }
         public int[] Detalle { get; set; }
+        public Cliente Cliente { get; set; }
+        public List<DetalleAlquiler> DetalleAlquilers { get; set; }
     }
 }
