@@ -39,7 +39,7 @@ namespace Backend_Alquiler.Controllers
                              FechaAlquiler = i.FechaAlquiler,
                              valor = i.ValorAlquiler,
                              Cliente = _context.Clientes.Where(c => c.Id == i.ClienteId).FirstOrDefault(),
-                             DetalleAlquilers = _context.DetalleAlquileres.Where(d => d.AlquilerId == i.Id).ToList()
+                             DetalleAlquilers = _context.DetalleAlquileres.Include("Cd").Where(d => d.AlquilerId == i.Id).ToList()
         }).ToList();
             return Lista;
         }
